@@ -25,6 +25,8 @@ public class ProductController {
 
     @PostMapping("/customProducts")
     public ResponseEntity<?> postProduct(@RequestBody ProductForm form) {
+        form.setCategory(form.getCategory().split("/")[form.getCategory().split("/").length - 1]);
+
         Category c = categoryRepository.findById(form.getCategory()).get();
         Product p = productRepository.save(new Product(null, form.getName(), form.getPrice(), c));
         c.getProducts().add(p);
@@ -35,6 +37,8 @@ public class ProductController {
     @PutMapping("/customProducts")
     public ResponseEntity<?> putProduct(@RequestBody ProductForm form) {
         form.setCategory(form.getCategory().split("/")[form.getCategory().split("/").length - 1]);
+        form.setId(form.getId().split("/")[form.getId().split("/").length - 1]);
+
         Product product = productRepository.findById(form.getId()).get();
 
         Category oldCategory = product.getCategory();
